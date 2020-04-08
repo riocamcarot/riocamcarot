@@ -1,0 +1,113 @@
+#include <iostream>
+#include <time.h>
+using namespace std;
+#define N 100
+//Kiem tra su ton tai cua gia tri
+bool khongTonTai(int n, int giaTri[], int soGiaTri){
+	for(int i=0;i<soGiaTri;i++){
+		if(n==giaTri[i]){
+			return false;
+		}	
+	}
+	return true;
+}
+
+void check(int arr[][N],int a, int b, int giaTri[], int &soGiaTri){
+	bool skip=false;
+	soGiaTri=0;
+	giaTri[0]=0;
+	for(int k=0;k<=a*b;k++){
+		skip=false;
+		for(int i=0;i<a;i++){
+			for(int j=0;j<b;j++){
+				if(khongTonTai(arr[i][j],giaTri,soGiaTri)){
+					soGiaTri++;
+					giaTri[k]=arr[i][j];
+					skip=true;
+					break;
+				}
+			}
+			if(skip==true) break;
+		}
+	}
+}
+
+void nhap(int arr[][N],int &a, int &b){
+	int lim;
+	cout<<"Nhap gioi han so ngau nhien (0~???): ";
+	cin>>lim;
+	cout<<"Nhap so luong hang,cot ([x][y]): ";
+	cin>> a; cin>>b;
+	srand((int)time(NULL));
+	for(int i=0;i<a;i++){
+		for(int j=0;j<b;j++){
+			arr[i][j]=rand()%(lim+1);
+		}
+	}
+}
+
+void xuat(int arr[][N], int &a, int &b){
+	cout<<"Xuat mang: ";
+	for(int i=0;i<a;i++){
+		for(int j=0;j<b;j++){
+			cout<<arr[i][j]<<" ";
+		}
+		if(i==a-1){
+			break;
+		}
+		cout<<endl<<"\t   ";
+	}
+	cout<<endl<<endl;
+}
+
+void xuatGT(int giaTri[], int soGiaTri){
+	cout<<"Xuat ham gia tri: ";
+	for(int i=0;i<soGiaTri;i++){
+		cout<<giaTri[i]<<" ";
+	}
+	cout<<endl;
+}
+
+void viTri(int giaTri,int arr[][N],int a,int b){
+		for(int i=0;i<a;i++){
+			for(int j=0;j<b;j++){
+				if(giaTri==arr[i][j]){
+					cout<<"Vi tri: hang "<<i+1<<" cot "<<j+1<<endl;
+				}	
+			}
+		}
+		cout<<endl;
+}
+
+void demSo(int giaTri[],int soGiaTri,int arr[][N],int a,int b){
+	int dem;
+	bool test=false;
+	for(int k=0;k<soGiaTri;k++){
+		dem=0;
+		for(int i=0;i<a;i++){
+			for(int j=0;j<b;j++){
+				if(giaTri[k]==arr[i][j]){
+					dem++;
+				}	
+			}
+		}
+		if(dem>1){
+			test=true;
+			cout<<"So "<<giaTri[k]<<" xuat hien "<<dem<<" lan!\n";
+			viTri(giaTri[k],arr,a,b);
+		}
+	}
+	if(!test){
+		cout<<"Khong co so nao trung nhau!\n";
+	}
+}
+
+int main(){
+	int arr[N][N],a,b,giaTri[N],soGiaTri;
+	cout<<"Chuong trinh xuat ra mang hinh cac so trung nhau trong mang!!!\n";
+	nhap(arr,a,b);
+	xuat(arr,a,b);
+	check(arr,a,b,giaTri,soGiaTri);
+	demSo(giaTri,soGiaTri,arr,a,b);
+	return 0;
+}
